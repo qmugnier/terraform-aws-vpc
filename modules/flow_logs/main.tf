@@ -40,7 +40,7 @@ resource "aws_flow_log" "main" {
   log_destination_type = var.flow_log_definition.log_destination_type
   traffic_type         = var.flow_log_definition.traffic_type
   vpc_id               = var.vpc_id
-
+  log_format           = "$${account-id} $${action} $${az-id} $${bytes} $${dstaddr} $${dstport} $${end} $${flow-direction} $${instance-id} $${interface-id} $${log-status} $${packets} $${pkt-dst-aws-service} $${pkt-dstaddr} $${pkt-src-aws-service} $${pkt-srcaddr} $${protocol} $${region} $${srcaddr} $${srcport} $${start} $${sublocation-id} $${sublocation-type} $${subnet-id} $${tcp-flags} $${traffic-path} $${type} $${version} $${vpc-id}"
   dynamic "destination_options" {
     for_each = var.flow_log_definition.log_destination_type == "s3" ? [true] : []
 
