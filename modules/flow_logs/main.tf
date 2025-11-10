@@ -51,8 +51,5 @@ resource "aws_flow_log" "main" {
     }
   }
 
-  tags = merge(
-    { Name = var.name },
-    var.tags
-  )
+  tags =  var.tags
 }
