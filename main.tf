@@ -41,6 +41,12 @@ resource "aws_vpc" "main" {
     { "Name" = var.name },
     module.tags.tags_aws
   )
+
+  lifecycle {
+  ignore_changes = [
+    tags["Name"],  # Ignore changes to the "Name" tag only
+  ]
+}
 }
 
 # ---------- SECONDARY IPv4 CIDR BLOCK (if configured) ----------
@@ -71,6 +77,12 @@ resource "aws_subnet" "public" {
     module.tags.tags_aws,
     try(module.subnet_tags["public"].tags_aws, {})
   )
+
+  lifecycle {
+  ignore_changes = [
+    tags["Name"],  # Ignore changes to the "Name" tag only
+  ]
+}
 }
 
 # Public subnet Route Table and association
@@ -84,6 +96,12 @@ resource "aws_route_table" "public" {
     module.tags.tags_aws,
     try(module.subnet_tags["public"].tags_aws, {})
   )
+
+  lifecycle {
+  ignore_changes = [
+    tags["Name"],  # Ignore changes to the "Name" tag only
+  ]
+}
 }
 
 resource "aws_route_table_association" "public" {
@@ -103,6 +121,12 @@ resource "aws_eip" "nat" {
     module.tags.tags_aws,
     try(module.subnet_tags["public"].tags_aws, {})
   )
+
+  lifecycle {
+  ignore_changes = [
+    tags["Name"],  # Ignore changes to the "Name" tag only
+  ]
+}
 }
 
 # NAT gateways (if configured)
@@ -121,6 +145,11 @@ resource "aws_nat_gateway" "main" {
   depends_on = [
     aws_internet_gateway.main
   ]
+  lifecycle {
+  ignore_changes = [
+    tags["Name"],  # Ignore changes to the "Name" tag only
+  ]
+}
 }
 
 # Internet gateway (if public subnets are created)
@@ -133,6 +162,12 @@ resource "aws_internet_gateway" "main" {
     module.tags.tags_aws,
     try(module.subnet_tags["public"].tags_aws, {})
   )
+
+  lifecycle {
+  ignore_changes = [
+    tags["Name"],  # Ignore changes to the "Name" tag only
+  ]
+}
 }
 
 # Egress-only IGW (if indicated)
@@ -144,6 +179,12 @@ resource "aws_egress_only_internet_gateway" "eigw" {
     { "Name" = var.name },
     module.tags.tags_aws
   )
+
+  lifecycle {
+  ignore_changes = [
+    tags["Name"],  # Ignore changes to the "Name" tag only
+  ]
+}
 }
 
 # Route: 0.0.0.0/0 from public subnets to the Internet gateway
@@ -249,6 +290,12 @@ resource "aws_subnet" "private" {
   depends_on = [
     aws_vpc_ipv4_cidr_block_association.secondary
   ]
+
+  lifecycle {
+  ignore_changes = [
+    tags["Name"],  # Ignore changes to the "Name" tag only
+  ]
+}
 }
 
 # Private subnet Route Table and association
@@ -262,6 +309,12 @@ resource "aws_route_table" "private" {
     module.tags.tags_aws,
     try(module.subnet_tags[split("/", each.key)[0]].tags_aws, {})
   )
+
+  lifecycle {
+  ignore_changes = [
+    tags["Name"],  # Ignore changes to the "Name" tag only
+  ]
+}
 }
 
 resource "aws_route_table_association" "private" {
@@ -374,6 +427,12 @@ resource "aws_subnet" "tgw" {
     try(module.subnet_tags["transit_gateway"].tags_aws, {})
   )
 
+  lifecycle {
+  ignore_changes = [
+    tags["Name"],  # Ignore changes to the "Name" tag only
+  ]
+}
+
 }
 
 # Transit Gateway subnet Route Table and association
@@ -387,6 +446,12 @@ resource "aws_route_table" "tgw" {
     module.tags.tags_aws,
     try(module.subnet_tags["transit_gateway"].tags_aws, {})
   )
+
+  lifecycle {
+  ignore_changes = [
+    tags["Name"],  # Ignore changes to the "Name" tag only
+  ]
+}
 }
 
 resource "aws_route_table_association" "tgw" {

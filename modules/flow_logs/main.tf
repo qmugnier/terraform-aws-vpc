@@ -55,4 +55,10 @@ resource "aws_flow_log" "main" {
     { Name = var.name },
     var.tags
   )
+
+  lifecycle {
+  ignore_changes = [
+    tags["Name"],  # Ignore changes to the "Name" tag only
+  ]
+}
 }
