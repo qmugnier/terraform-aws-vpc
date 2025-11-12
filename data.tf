@@ -135,7 +135,7 @@ data "aws_vpc" "main" {
 # aws   tags = module.tags.tags_aws
 # awscc tags = module.tags.tags
 module "tags" {
-  source  = "aws-ia/label/aws"
+  source  = "qmugnier/label/aws"
   version = "0.0.5"
 
   tags = var.tags
